@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ma.emsi.eljazouly</groupId>
+    <artifactId>tp4-eljazouly-25-26</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>TP 4 RAG - Abdessamad El Jazouly</name>
+
+    <properties>
+        <maven.compiler.release>25</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <langchain4j.version>1.24.1</langchain4j.version>
+        <langchain4j.beta.version>1.24.1-beta34</langchain4j.beta.version>
+        <logback.version>1.6.7</logback.version>
+    </properties>
+
+    <dependencies>
+        <!-- LangChain4j -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j</artifactId>
+            <version>${langchain4j.version}</version>
+        </dependency>
+        <!-- Utilisation de l'API de Gemini avec LangChain4j -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-google-genai</artifactId>
+            <version>${langchain4j.beta.version}</version>
+        </dependency>
+        <!-- Parseur de documents (PDF) base sur Apache Tika -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-document-parser-apache-tika</artifactId>
+            <version>${langchain4j.beta.version}</version>
+        </dependency>
+        <!-- Modele d'embeddings AllMiniLmL6V2, execute localement -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-embeddings-all-minilm-l6-v2</artifactId>
+            <version>${langchain4j.beta.version}</version>
+        </dependency>
+        <!-- Implementation concrete de SLF4J pour le logging -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+    </dependencies>
+</project>
