@@ -44,6 +44,12 @@
             <artifactId>langchain4j-embeddings-all-minilm-l6-v2</artifactId>
             <version>${langchain4j.beta.version}</version>
         </dependency>
+        <!-- Moteur de recherche sur le Web Tavily -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-web-search-engine-tavily</artifactId>
+            <version>${langchain4j.beta.version}</version>
+        </dependency>
         <!-- Implementation concrete de SLF4J pour le logging -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
