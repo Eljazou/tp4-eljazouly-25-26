@@ -18,6 +18,7 @@ import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.rag.content.retriever.WebSearchContentRetriever;
 import dev.langchain4j.rag.query.router.DefaultQueryRouter;
+import dev.langchain4j.rag.query.router.LanguageModelQueryRouter;
 import dev.langchain4j.rag.query.router.QueryRouter;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
@@ -25,7 +26,9 @@ import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 import dev.langchain4j.web.search.WebSearchEngine;
 import dev.langchain4j.web.search.tavily.TavilyWebSearchEngine;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -84,8 +87,26 @@ public class Test4 {
                 .webSearchEngine(webSearchEngine)
                 .build();
 
-        // Les 2 ContentRetrievers sont toujours utilisés : PDF et Web.
-        QueryRouter queryRouter = new DefaultQueryRouter(contentRetrieverPdf, contentRetrieverWeb);
+        // Première version (mise en commentaire pour l'exercice bonus) :
+        // les 2 ContentRetrievers sont toujours utilisés : PDF et Web.
+        // Problème : pour une question sans rapport avec le PDF (par exemple sur un événement
+        // récent), DefaultQueryRouter appelle quand même le ContentRetriever du PDF ; il suffit
+        // que des segments du PDF aient un score de similarité >= 0,5 avec la question pour
+        // qu'ils soient ajoutés à la question envoyée au LLM.
+        // QueryRouter queryRouter = new DefaultQueryRouter(contentRetrieverPdf, contentRetrieverWeb);
+
+        // Correction : comme dans le test sur le routage, le LM choisit la ou les sources
+        // à utiliser d'après leur description ; le PDF n'est plus utilisé pour les questions
+        // d'actualité ou générales qui ne portent pas sur le contenu du cours.
+        Map<ContentRetriever, String> descriptions = new HashMap<>();
+        descriptions.put(contentRetrieverPdf,
+                "Support de cours sur le fine-tuning et le RAG (Retrieval Augmented Generation) "
+                        + "des modèles de langage : embeddings, segments, magasins d'embeddings, "
+                        + "routage, LangChain4j");
+        descriptions.put(contentRetrieverWeb,
+                "Recherche sur le Web : actualités, événements récents et toutes les informations "
+                        + "générales qui ne se trouvent pas dans le support de cours");
+        QueryRouter queryRouter = new LanguageModelQueryRouter(model, descriptions);
 
         RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
                 .queryRouter(queryRouter)
